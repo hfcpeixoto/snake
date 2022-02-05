@@ -63,6 +63,22 @@ class SnakeApp:
         self.pen.goto(0,250)
         self.pen.write("Score: {} High score: {}".format(self.score,self.high_score),align="center",font=("candara",24,"bold"))
 
+    def game_over(self):
+        self.pen.goto(0,0)
+        self.pen.write("Game Over", align="center",font=("candara",40,"bold"))
+        time.sleep(2)
+        self.pen.goto(0,250)      
+        self.head.goto(0,0)
+        self.head.direction = "stop"
+
+        for segment in self.segments:
+            segment.goto(1000,1000)
+        self.segments.clear()
+        self.score = 0
+        self.delay = 0.1
+        self.pen.clear()
+        self.pen.write("Score: {} High score: {}".format(self.score,self.high_score),align="center",font=("candara",24,"bold"))
+
     def godown(self):
         if self.head.direction != "up":
             self.head.direction = "down"
@@ -96,20 +112,7 @@ class SnakeApp:
             time.sleep(self.delay)
             
             if self.head.xcor()>290 or self.head.xcor()<-290 or self.head.ycor()>290 or self.head.ycor()<-290:
-                self.pen.goto(0,0)
-                self.pen.write("Game Over", align="center",font=("candara",40,"bold"))
-                time.sleep(2)
-                self.pen.goto(0,250)      
-                self.head.goto(0,0)
-                self.head.direction = "stop"
-
-                for segment in self.segments:
-                    segment.goto(1000,1000)
-                self.segments.clear()
-                self.score = 0
-                self.delay = 0.1
-                self.pen.clear()
-                self.pen.write("Score: {} High score: {}".format(self.score,self.high_score),align="center",font=("candara",24,"bold"))
+                self.game_over()
             
             if self.head.distance(self.food) <20:
                 x = random.randint(-270,270)
@@ -150,24 +153,8 @@ class SnakeApp:
             
             for segment in self.segments:
                 if segment.distance(self.head)<20:
-                    self.pen.goto(0,0)
-                    self.pen.write("Game Over", align="center",font=("candara",40,"bold"))            
-                    time.sleep(2)
-                    self.pen.goto(0,250)
-                    self.head.goto(0,0)
-                    self.head.direction = "stop"
+                    self.game_over()
                     
-                    for segment in self.segments:
-                        segment.goto(1000,1000)
-                    self.segments.clear()
-                    self.score = 0
-                    self.delay = 0.1
-                
-
-                    
-                    self.pen.clear()
-                    self.pen.write("Score: {} High score: {}".format(self.score,self.high_score),align="center",font=("candara",24,"bold"))
-
         self.wn.mainloop()
         turtle.done()
 
